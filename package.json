@@ -1,0 +1,27 @@
+{
+  "name": "blamazon",
+  "version": "1.0.0",
+  "description": "This is a homework project.",
+  "main": "blamazonCustomer.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrianChristopher/Blamazon.git"
+  },
+  "keywords": [
+    "mysql"
+  ],
+  "author": "Me",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrianChristopher/Blamazon/issues"
+  },
+  "homepage": "https://github.com/BrianChristopher/Blamazon#readme",
+  "dependencies": {
+    "inquirer": "^6.4.1",
+    "mysql": "^2.17.1",
+    "table": "^5.4.1"
+  }
+}
