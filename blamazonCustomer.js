@@ -72,7 +72,9 @@ let buyProduct = function () {
                     let stock = res[0].stock_quantity;
 
                     if (quantity > stock) {
-                        console.log("We're sorry. There are insufficient quantities in stock to fulfill your order.")
+                        console.log("\nWe're sorry. There are insufficient quantities in stock to fulfill your order. \nRestart BLAMAZON to make a different purchase.");
+                        connection.end();
+                        
                     }
                     else {
                         console.log("The total cost of your order is $" + (quantity * price) + ".\nThank you for shopping Blamazon.");
