@@ -3,6 +3,10 @@ const { table } = require('table');
 const inquirer = require('inquirer');
 
 let tableData = [];
+let item = 0;
+let quantity = 0;
+let newQuantity = 0;
+
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -14,7 +18,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId + "\n");
+    //console.log("connected as id " + connection.threadId + "\n");
     //connection.end();
     displayInventory();
 
@@ -57,23 +61,40 @@ let buyProduct = function () {
         ])
         .then(answers => {
             // Use user feedback for... whatever!!
-            let item = answers.item;
-            let quantity = answers.quantity;
+            item = answers.item;
+            quantity = answers.quantity;
 
             if (item > 0 && item <= tableData.length) {
 
-                console.log("Good choice. You are not a complete idiot.")
+                connection.query("SELECT * FROM products WHERE item_id = ?", item, function (err, res) {
+                    if (err) throw err;
+                    let price = res[0].price;
+                    let stock = res[0].stock_quantity;
+
+                    if (quantity > stock) {
+                        console.log("We're sorry. There are insufficient quantities in stock to fulfill your order.")
+                    }
+                    else {
+                        console.log("The total cost of your order is $" + (quantity * price) + ".\nThank you for shopping Blamazon.");
+                        newQuantity = stock - quantity;
+                        updateDatabase();
+                    }
+                });
             }
             else {
-
                 console.log("That is not an item. Please select an item by item number.")
             }
-
-
-
-            connection.end();
         });
-
 };
+
+let updateDatabase = function () {
+    //console.log(item, newQuantity);
+
+    connection.query(`UPDATE products SET stock_quantity = ${newQuantity} WHERE item_id = ${item}`, function (error, results, fields) {
+        if (error) throw error;
+
+    })
+    connection.end();
+}
 
 
