@@ -1,8 +1,8 @@
 const mysql = require('mysql');
 const { table } = require('table');
+const inquirer = require('inquirer');
 
 let tableData = [];
-
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -37,6 +37,43 @@ let displayInventory = function () {
         output = table(tableData);
         console.log(output);
 
-        connection.end();
+        buyProduct();
     });
-}
+};
+
+let buyProduct = function () {
+    inquirer
+        .prompt([
+            {
+                type: 'number',
+                name: 'item',
+                message: "Select the item number you would like to purchase."
+            },
+            {
+                type: 'number',
+                name: 'quantity',
+                message: "How many would you like to purchase?"
+            }
+        ])
+        .then(answers => {
+            // Use user feedback for... whatever!!
+            let item = answers.item;
+            let quantity = answers.quantity;
+
+            if (item > 0 && item <= tableData.length) {
+
+                console.log("Good choice. You are not a complete idiot.")
+            }
+            else {
+
+                console.log("That is not an item. Please select an item by item number.")
+            }
+
+
+
+            connection.end();
+        });
+
+};
+
+
