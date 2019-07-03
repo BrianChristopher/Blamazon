@@ -43,23 +43,19 @@ let startProgram = function () {
                     displayInventory();
                     break;
                 };
-
                 case ("View Low Inventory"): {
                     displayLowInventory();
                     break;
                 };
-
                 case ("Add to Inventory"): {
                     addInventory();
                     break;
                 };
-
                 case ("Add New Product"): {
                     addProduct();
                     break;
                 };
-
-                case ("EXIT"): {
+                default: {
                     exitProgram();
                     break;
                 };
@@ -117,17 +113,6 @@ let displayLowInventory = function () {
     });
 };
 
-// let addInventory = function () {
-//     console.log("Add inventory called.");
-//     startProgram();
-// }
-
-let addProduct = function () {
-    console.log("Add product called.");
-    startProgram();
-}
-
-
 
 let addInventory = function () {
     inquirer
@@ -151,7 +136,7 @@ let addInventory = function () {
                 if (err) throw err;
                 let stock = res[0].stock_quantity;
                 newQuantity = stock + addToInventory;
-                updateInventory(item, newQuantity)
+                updateInventory(item, newQuantity);
             });
         });
 };
@@ -163,6 +148,60 @@ let updateInventory = function (id, newStock) {
     });
     startProgram();
 }
+
+let addProduct = function () {
+    console.log("Add product called.");
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'product_name',
+            message: "Name of new product to add:"
+        },
+        {
+            type: 'input',
+            name: 'department_name',
+            message: "Department of new product:"
+        },
+        {
+            type: 'number',
+            name: 'price',
+            message: "Sale price of new product:"
+        },
+        {
+            type: 'number',
+            name: 'stock_quantity',
+            message: "Stock quantity of new product:"
+        }
+    ])
+        .then(answers => {
+            let newProduct_name = answers.product_name;
+            let newDepartment_name = answers.department_name;
+            let newPrice = answers.price;
+            let newStock_quantity = answers.stock_quantity;
+
+            connection.query("INSERT INTO products SET ?",
+                {
+                    product_name: newProduct_name,
+                    department_name: newDepartment_name,
+                    price: newPrice,
+                    stock_quantity: newStock_quantity
+                },
+                function (err, res) {
+                    if (err) throw err;
+                    startProgram();
+                }
+                
+            );
+
+        });
+
+
+
+}
+
+
+
+
 
 let exitProgram = function () {
     console.log("Thank you for using BLAMAZON MANAGER SYSTEM. Have a fantastic day!");
