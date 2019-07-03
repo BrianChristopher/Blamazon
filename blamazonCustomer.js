@@ -29,7 +29,8 @@ let displayInventory = function () {
     console.log("\nBLAMAZON PRODUCTS FOR SALE\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        // Create a table, an array of arrays. Log all results of the SELECT statement.
+        let tableHeader = ["ID", "PRODUCT NAME", "PRICE"]
+        tableData.push(tableHeader);
         for (let i = 0; i < res.length; i++) {
             let id = res[i].item_id;
             let name = res[i].product_name;
@@ -51,7 +52,7 @@ let buyProduct = function () {
             {
                 type: 'number',
                 name: 'item',
-                message: "Select the item number you would like to purchase."
+                message: "Select the item ID you would like to purchase."
             },
             {
                 type: 'number',
